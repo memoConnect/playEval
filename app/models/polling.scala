@@ -3,6 +3,9 @@ package models
 import java.util.Date
 import play.api.libs.json._
 import play.api.libs.functional.syntax._
+import play.modules.reactivemongo.json.collection.JSONCollection
+import play.modules.reactivemongo.ReactiveMongoPlugin
+import play.api.Play.current
 
 /**
  * Created by Weily on 07.01.14.
@@ -16,6 +19,8 @@ case class Polling(
                  )
 
 object Polling {
+
+  val pollCollection: JSONCollection = ReactiveMongoPlugin.db.collection[JSONCollection]("polling")
 
   def inputReads: Reads[Polling] = {(
     Reads.pure[String]("12345") and
