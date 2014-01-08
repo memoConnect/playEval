@@ -1,0 +1,16 @@
+/createPolling
+{
+  "options": ["eins","zwei","drei"]
+}
+
+/getPolling/:pollingId
+
+/castVote/:pollingId
+{
+  "nameVoter": "boiler",
+  "votes": [
+    ["eins"],
+    ["zwei","fünf"],
+    ["drei"]
+  ]
+}
