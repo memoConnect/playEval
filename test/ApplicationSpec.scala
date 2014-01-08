@@ -17,6 +17,8 @@ class ApplicationSpec extends Specification {
 
   "Application" should {
 
+    var pollingId = ""
+
     "send 404 on a bad request" in new WithApplication{
       route(FakeRequest(GET, "/boum")) must beNone
     }
@@ -55,15 +57,17 @@ class ApplicationSpec extends Specification {
 
       status(create) must equalTo(OK)
 
-      val pollingId = ( contentAsJson(create) \ "pollingId").asOpt[String]
-      pollingId must not beEmpty
+      val pollingIdOpt = ( contentAsJson(create) \ "pollingId").asOpt[String]
+      pollingIdOpt must not beEmpty
+
+      pollingId = pollingIdOpt.getOrElse("maep")
 
     }
 
     "Cast a vote - Wrong JSON at votes" in new WithApplication{
       val json = Json.obj( "votes" -> Seq("two","five"))
 
-      val req = FakeRequest(POST, "/castVote/12345").withJsonBody(json)
+      val req = FakeRequest(POST, "/castVote/" + pollingId).withJsonBody(json)
       val create = route(req).get
 
       status(create) must equalTo(BAD_REQUEST)
@@ -82,7 +86,7 @@ class ApplicationSpec extends Specification {
 
       val json = Json.obj( "nameVoter" -> "schmusi", "votes" -> Seq(Seq("one"), Seq("two","five"), Seq("three")))
 
-      val req = FakeRequest(POST, "/castVote/12345").withJsonBody(json)
+      val req = FakeRequest(POST, "/castVote/" + pollingId).withJsonBody(json)
       val create = route(req).get
 
       status(create) must equalTo(OK)
@@ -102,7 +106,7 @@ class ApplicationSpec extends Specification {
 
     "Get a poll - Right" in new WithApplication{
 
-      val req = FakeRequest(GET, "/getPolling/12345")
+      val req = FakeRequest(GET, "/getPolling/" + pollingId)
       val create = route(req).get
 
       status(create) must equalTo(OK)
