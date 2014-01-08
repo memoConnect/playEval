@@ -6,6 +6,10 @@ import play.api.libs.functional.syntax._
 import play.modules.reactivemongo.json.collection.JSONCollection
 import play.modules.reactivemongo.ReactiveMongoPlugin
 import play.api.Play.current
+import reactivemongo.api.indexes.{IndexType, Index}
+import scala.concurrent.ExecutionContext
+import ExecutionContext.Implicits.global
+import helper._
 
 /**
  * Created by Weily on 07.01.14.
@@ -21,11 +25,12 @@ case class Polling(
 object Polling {
   // mongo collection
   def pollCollection: JSONCollection = ReactiveMongoPlugin.db.collection[JSONCollection]("polling")
+  // indizie
+  pollCollection.indexesManager.ensure(Index(List("pollingId" -> IndexType.Ascending), unique = true, sparse = true))
 
-  // TODO: ID generieren
   // default validate Polling Object
   def inputReads: Reads[Polling] = {(
-    Reads.pure[String]("12345") and
+    Reads.pure[String](RandomIdHelper.randomString(16)) and
     (__ \ 'options).read[Seq[String]] and
     Reads.pure[Option[Seq[Vote]]](None) and
     Reads.pure[Option[Seq[String]]](None) and

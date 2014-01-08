@@ -21,6 +21,7 @@ object Application extends Controller {
        ,valid = {polling:Polling => {
           // -> insert into mongodb
           Polling.pollCollection.insert(Json.toJson(polling))
+
           // set request
           Ok(Json.toJson(polling))
         }}
