@@ -6,6 +6,7 @@ import models.Polling
 import models.Vote
 import scala.concurrent.{Future, ExecutionContext}
 import ExecutionContext.Implicits.global
+import play.api.Logger
 
 object Application extends Controller {
 
