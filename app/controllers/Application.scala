@@ -64,6 +64,9 @@ object Application extends Controller {
                   val set = Json.obj( "$push" -> Json.obj( "votes" -> Json.toJson(votes)) )
                   Polling.pollCollection.update(query, set)
 
+                  // actor gets polling id
+                  actors.calculationActor ! pollingId
+
                   Ok(Json.toJson(votes))
                 }
               }

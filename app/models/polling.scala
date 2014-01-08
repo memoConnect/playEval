@@ -20,7 +20,7 @@ case class Polling(
 
 object Polling {
   // mongo collection
-  val pollCollection: JSONCollection = ReactiveMongoPlugin.db.collection[JSONCollection]("polling")
+  def pollCollection: JSONCollection = ReactiveMongoPlugin.db.collection[JSONCollection]("polling")
 
   // TODO: ID generieren
   // default validate Polling Object

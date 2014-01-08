@@ -25,10 +25,10 @@ class ApplicationSpec extends Specification {
       val home = route(FakeRequest(GET, "/")).get
 
       status(home) must equalTo(OK)
-      contentAsString(home) must contain ("Welcome to Schulze Polling made with Play & Scala")
+      contentAsString(home) must contain ("Welcome")
     }
 
-    "Return error on invalid input 1" in new WithApplication{
+    "Create a poll - Invalid JSON" in new WithApplication{
 
       val json = Json.obj( "options" -> "one")
       val req = FakeRequest(POST, "/createPolling").withJsonBody(json)
@@ -38,7 +38,7 @@ class ApplicationSpec extends Specification {
 
     }
 
-    "Return error on invalid input 2" in new WithApplication{
+    "Create a poll - Without JSON" in new WithApplication{
 
       val req = FakeRequest(POST, "/createPolling")
       val create = route(req).get
@@ -47,7 +47,7 @@ class ApplicationSpec extends Specification {
 
     }
 
-    "Create a poll" in new WithApplication{
+    "Create a poll - Right" in new WithApplication{
 
       val json = Json.obj( "options" -> Seq("one", "two", "three"))
       val req = FakeRequest(POST, "/createPolling").withJsonBody(json)
@@ -60,7 +60,25 @@ class ApplicationSpec extends Specification {
 
     }
 
-    "Cast a vote" in new WithApplication{
+    "Cast a vote - Wrong JSON at votes" in new WithApplication{
+      val json = Json.obj( "votes" -> Seq("two","five"))
+
+      val req = FakeRequest(POST, "/castVote/12345").withJsonBody(json)
+      val create = route(req).get
+
+      status(create) must equalTo(BAD_REQUEST)
+    }
+
+    "Cast a vote - Wrong Polling ID" in new WithApplication{
+      val json = Json.obj( "nameVoter" -> "schmusi", "votes" -> Seq(Seq("one"), Seq("two","five"), Seq("three")))
+
+      val req = FakeRequest(POST, "/castVote/nixeId").withJsonBody(json)
+      val create = route(req).get
+
+      status(create) must equalTo(NOT_FOUND)
+    }
+
+    "Cast a vote - Right" in new WithApplication{
 
       val json = Json.obj( "nameVoter" -> "schmusi", "votes" -> Seq(Seq("one"), Seq("two","five"), Seq("three")))
 
@@ -71,7 +89,16 @@ class ApplicationSpec extends Specification {
 
     }
 
-    "Get a poll" in new WithApplication{
+    "Get a poll - Wrong ID" in new WithApplication{
+
+      val req = FakeRequest(GET, "/getPolling/nixeId")
+      val create = route(req).get
+
+      status(create) must equalTo(NOT_FOUND)
+
+    }
+
+    "Get a poll - Right" in new WithApplication{
 
       val req = FakeRequest(GET, "/getPolling/12345")
       val create = route(req).get
