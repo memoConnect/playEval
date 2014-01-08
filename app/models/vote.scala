@@ -8,10 +8,10 @@ import play.api.libs.functional.syntax._
  * Created by Weily on 07.01.14.
  */
 case class Vote(
-                voteDate: Date,
-                nameVoter: Option[String],
-                votes: Seq[Seq[String]]
-                 )
+   voteDate: Date
+  ,nameVoter: Option[String]
+  ,votes: Seq[Seq[String]]
+  )
 
 object Vote {
 

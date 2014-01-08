@@ -11,19 +11,19 @@ import play.api.Play.current
  * Created by Weily on 07.01.14.
  */
 case class Polling(
-                  pollingId: String
-                 ,options: Seq[String]
-                 ,votes: Option[Seq[Vote]]
-                 ,result: Option[Seq[String]]
-                 ,createDate: Date
-                 )
+   pollingId: String
+  ,options: Seq[String]
+  ,votes: Option[Seq[Vote]]
+  ,result: Option[Seq[String]]
+  ,createDate: Date
+  )
 
 object Polling {
   // mongo collection
   val pollCollection: JSONCollection = ReactiveMongoPlugin.db.collection[JSONCollection]("polling")
 
   // TODO: ID generieren
-  // default generiertes Polling Object
+  // default validate Polling Object
   def inputReads: Reads[Polling] = {(
     Reads.pure[String]("12345") and
     (__ \ 'options).read[Seq[String]] and

@@ -6,6 +6,7 @@
 GET     /                           controllers.Application.index
 POST    /castVote/:pollingId        controllers.Application.castVote(pollingId: String)
 POST    /createPolling              controllers.Application.createPolling()
+GET     /getPolling/:pollingId      controllers.Application.getPolling(pollingId: String)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

@@ -25,20 +25,7 @@ class ApplicationSpec extends Specification {
       val home = route(FakeRequest(GET, "/")).get
 
       status(home) must equalTo(OK)
-      contentAsString(home) must contain ("Hello Api")
-    }
-
-    "Create a poll" in new WithApplication{
-
-      val json = Json.obj( "options" -> Seq("one", "two", "three"))
-      val req = FakeRequest(POST, "/createPolling").withJsonBody(json)
-      val create = route(req).get
-
-      status(create) must equalTo(OK)
-
-      val pollingId = ( contentAsJson(create) \ "pollingId").asOpt[String]
-      pollingId must not beEmpty
-
+      contentAsString(home) must contain ("Welcome to Schulze Polling made with Play & Scala")
     }
 
     "Return error on invalid input 1" in new WithApplication{
@@ -60,7 +47,20 @@ class ApplicationSpec extends Specification {
 
     }
 
-    "cast a vote" in new WithApplication{
+    "Create a poll" in new WithApplication{
+
+      val json = Json.obj( "options" -> Seq("one", "two", "three"))
+      val req = FakeRequest(POST, "/createPolling").withJsonBody(json)
+      val create = route(req).get
+
+      status(create) must equalTo(OK)
+
+      val pollingId = ( contentAsJson(create) \ "pollingId").asOpt[String]
+      pollingId must not beEmpty
+
+    }
+
+    "Cast a vote" in new WithApplication{
 
       val json = Json.obj( "nameVoter" -> "schmusi", "votes" -> Seq(Seq("one"), Seq("two","five"), Seq("three")))
       val req = FakeRequest(POST, "/castVote/12345").withJsonBody(json)
@@ -70,6 +70,14 @@ class ApplicationSpec extends Specification {
 
     }
 
+    "Get a poll" in new WithApplication{
+
+      val req = FakeRequest(GET, "/getPolling/12345")
+      val create = route(req).get
+
+      status(create) must equalTo(OK)
+
+    }
 
   }
 }
