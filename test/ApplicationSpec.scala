@@ -28,7 +28,7 @@ class ApplicationSpec extends Specification {
       contentAsString(home) must contain ("Hello Api")
     }
 
-    "create a poll" in new WithApplication{
+    "Create a poll" in new WithApplication{
 
       val json = Json.obj( "options" -> Seq("one", "two", "three"))
       val req = FakeRequest(POST, "/createPolling").withJsonBody(json)
@@ -40,6 +40,26 @@ class ApplicationSpec extends Specification {
       pollingId must not beEmpty
 
     }
+
+    "Return error on invalid input 1" in new WithApplication{
+
+      val json = Json.obj( "options" -> "one")
+      val req = FakeRequest(POST, "/createPolling").withJsonBody(json)
+      val create = route(req).get
+
+      status(create) must equalTo(BAD_REQUEST)
+
+    }
+
+    "Return error on invalid input 2" in new WithApplication{
+
+      val req = FakeRequest(POST, "/createPolling")
+      val create = route(req).get
+
+      status(create) must equalTo(BAD_REQUEST)
+
+    }
+
 
     
 
