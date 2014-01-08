@@ -98,12 +98,17 @@ class ApplicationSpec extends Specification {
 
     }
 
+    Thread.sleep(200)
+
     "Get a poll - Right" in new WithApplication{
 
       val req = FakeRequest(GET, "/getPolling/12345")
       val create = route(req).get
 
       status(create) must equalTo(OK)
+
+      val result = ( contentAsJson(create) \ "result").as[Seq[String]]
+      result must equalTo(Seq("ich", "alle", "anderen"))
 
     }
 
