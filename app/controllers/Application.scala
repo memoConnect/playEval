@@ -27,8 +27,8 @@ object Application extends Controller {
     }
   }
 
-  def getPolling(pollingId: String) = Action.async(parse.tolerantJson) {
-    request: Request[JsValue] => {
+  def getPolling(pollingId: String) = Action.async {
+    request: Request[AnyContent] => {
       // id checkup
       val query = Json.obj( "pollingId" -> pollingId )
       // -> mongo select on pollingId
