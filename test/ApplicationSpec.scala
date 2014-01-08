@@ -37,7 +37,16 @@ class ApplicationSpec extends Specification {
 
     }
 
-    
+    "cast a vote" in new WithApplication{
+
+      val json = Json.obj( "nameVoter" -> "schmusi", "votes" -> Seq(Seq("one"), Seq("two","five"), Seq("three")))
+      val req = FakeRequest(POST, "/castVote/12345abcde").withJsonBody(json)
+      val create = route(req).get
+
+      status(create) must equalTo(OK)
+
+    }
+
 
   }
 }

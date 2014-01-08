@@ -19,9 +19,11 @@ case class Polling(
                  )
 
 object Polling {
-
+  // mongo collection
   val pollCollection: JSONCollection = ReactiveMongoPlugin.db.collection[JSONCollection]("polling")
 
+  // TODO: ID generieren
+  // default generiertes Polling Object
   def inputReads: Reads[Polling] = {(
     Reads.pure[String]("12345") and
     (__ \ 'options).read[Seq[String]] and

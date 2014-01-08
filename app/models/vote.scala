@@ -24,6 +24,5 @@ object Vote {
   implicit val defaultReads: Reads[Vote] = Json.reads[Vote]
   implicit val defaultWrites: Writes[Vote] = Json.writes[Vote]
 
-
 }
 
