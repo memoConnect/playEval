@@ -26,7 +26,7 @@ class CalcVotes extends Actor {
             case Some(polling: Polling) => {
               val lastVote = polling.votes.getOrElse(Seq()).last
 
-              val set = Json.obj("$set" -> Json.obj("result" -> Seq("ich", "alle", "anderen", "wumms")))
+              val set = Json.obj("$set" -> Json.obj("result" -> Seq("ich", "alle", "anderen", "wumms", "hummel")))
               Polling.pollCollection.update(query, set).map {
                 lastError: LastError => {
                   if (lastError.updatedExisting) {
